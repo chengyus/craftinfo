@@ -9,9 +9,11 @@ under this folder (such as craftinfo if you clone this from Github).
 
 (Using "Sleep Arrow" and "Sleep Bolt" as examples):
 
+```
 /craftinfo "Sleep Arrow"
-/craftinfo "Sleep Bolt"
 
+/craftinfo "Sleep Bolt"
+```
 ** How it works:
 
 It uses the htmlparser library to grab the Synthesis information
