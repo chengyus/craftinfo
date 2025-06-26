@@ -39,6 +39,11 @@ local function parse_bg_synth_info(body, item)
   end
 end
 
+local function cleanup_craftinfo()
+  craftinfo.total_recipes = 0;
+  craftinfo.recipes = {};
+end
+
 local function print_recipe_table()
   for i,r in ipairs(craftinfo.recipes) do
     print("Recipe#"..i..": "..craftinfo.recipes[i]);
@@ -63,7 +68,8 @@ ashita.events.register('command', 'command_cb', function(e)
   if code == 200 then
     -- print("200 info found");
     parse_bg_synth_info(body, craftinfo.item);
-    print_recipe_table()
+    print_recipe_table();
+    cleanup_craftinfo();
     return true
   else
     ashita.chat.output('HTTP error: ' .. tostring(code))
