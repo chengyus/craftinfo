@@ -51,7 +51,7 @@ local function parse_bg_synth_info(body, item)
   local root = htmlparser.parse(body);
   local elements = root:select(".item-info-body");
   for i,e in ipairs(elements) do
-	  local matz = e("li::marker > a:not(.selflink)")
+    local matz = e("li::marker > a:not(.selflink)")
     local wholeMatzString = "";
     for _, mat in ipairs(matz) do
       wholeMatzString = wholeMatzString .. mat:getcontent() .. ", ";
