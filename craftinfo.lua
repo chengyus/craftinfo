@@ -11,33 +11,33 @@ local http = require 'socket.http'
 local chat = require('chat');
 
 local craftinfo = T{
-  item    = '           ',  -- The item/receipe to lookup.
+  item          = '           ',  -- The item/receipe to lookup.
+  total_recipes = 0,              -- Current Recipe Count
   recipes = {}
 };
 
---local function encode_uri(str)
---  if not str then
---    return nil
---  end
---  str = string.gsub(str, "([^%w%.%-]+)", function (c)
---    return string.format("%%%02X", string.byte(c))
---  end)
---  return str
---end
-
 local function parse_bg_synth_info(body, item)
   first, last = string.find(body, item);
-  --print("item match first: "..first);
-  --print("item match last: "..last);
   local htmlparser = require("htmlparser");
   local root = htmlparser.parse(body);
   local elements = root:select(".item-info-body");
-  for _,e in ipairs(elements) do
-	  --print(e.name)
-	  local subs = e("li::marker > a:not(.selflink)")
-	  for _,sub in ipairs(subs) do
-		  print(sub:getcontent())
-	  end
+  for i,e in ipairs(elements) do
+	  local matz = e("li::marker > a:not(.selflink)")
+    local wholeMatzString = "";
+    for _, mat in ipairs(matz) do
+      wholeMatzString = wholeMatzString .. mat:getcontent() .. ", ";
+    end
+    local cleanedupMatzStr = string.gsub(wholeMatzString, ", $", '')
+    if cleanedupMatzStr ~= "" then
+      craftinfo.total_recipes = craftinfo.total_recipes + 1;
+      craftinfo.recipes[craftinfo.total_recipes] = cleanedupMatzStr;
+    end
+  end
+end
+
+local function print_recipe_table()
+  for i,r in ipairs(craftinfo.recipes) do
+    print("Recipe#"..i..": "..craftinfo.recipes[i]);
   end
 end
 
@@ -49,12 +49,8 @@ ashita.events.register('command', 'command_cb', function(e)
     return;
   end
   cmd = e.command;
-  --print(#args);
-  --print("\n");
-  --print(args[2]);
   if (#args == 2) then
     craftinfo.item = args[2];
-    -- print(chat.header(addon.name):append(chat.message('[DEBUG]: item set to: ')):append(chat.success(craftinfo.item)));
   end
   local item_ = craftinfo.item:gsub("%s+", "_");
   -- print(item_);
@@ -63,6 +59,7 @@ ashita.events.register('command', 'command_cb', function(e)
   if code == 200 then
     -- print("200 info found");
     parse_bg_synth_info(body, craftinfo.item);
+    print_recipe_table()
     return true
   else
     ashita.chat.output('HTTP error: ' .. tostring(code))
