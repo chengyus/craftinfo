@@ -28,7 +28,7 @@ addon.name      = 'craftinfo';
 addon.author    = 'Joesomsom';
 addon.version   = '1.0';
 addon.desc      = 'Tries to retrieve craft info.';
-addon.link      = 'N/A atm';
+addon.link      = 'https://github.com/chengyus/craftinfo';
 
 -- NOTE: This addon uses https://github.com/msva/lua-htmlparser library;
 --       So, you must either install it in the addons/libs or directly
