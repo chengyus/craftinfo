@@ -5,6 +5,10 @@ addon.version   = '1.0';
 addon.desc      = 'Tries to retrieve craft info.';
 addon.link      = 'N/A atm';
 
+-- NOTE: This addon uses https://github.com/msva/lua-htmlparser library;
+--       So, you must either install it in the addons/libs or directly
+--       under this folder (such as craftinfo).
+
 require 'common'
 local http = require 'socket.http'
 -- local json = require 'json'
